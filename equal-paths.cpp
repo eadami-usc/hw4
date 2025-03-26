@@ -34,14 +34,9 @@ bool equalPathsHelper(Node* node, int depth, int& leafDepth) {
         return depth == leafDepth;
     }
     
-    // check left and right subtrees    
-    if (node->left != nullptr) {
-        return equalPathsHelper(node->left, depth + 1, leafDepth);
-    }
+    // check left and right subtrees
+    bool leftPath = equalPathsHelper(node->left, depth + 1, leafDepth);
+    bool rightPath = equalPathsHelper(node->right, depth + 1, leafDepth);
     
-    if (node->right != nullptr) {
-        return equalPathsHelper(node->right, depth + 1, leafDepth);
-    }
-    
-    return equalPathsHelper(node->left, depth + 1, leafDepth) && equalPathsHelper(node->right, depth + 1, leafDepth);
+    return leftPath && rightPath;
 }
