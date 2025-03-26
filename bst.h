@@ -249,7 +249,8 @@ protected:
     // Add helper functions here
     static Node<Key, Value>* successor(Node<Key, Value>* current);
     void clearHelper(Node<Key, Value>* node);
-    int height(Node<Key, Value>* node);
+    bool isBalancedHelper(Node<Key, Value>* node) const;
+    int height(Node<Key, Value>* node) const;
 
 protected:
     Node<Key, Value>* root_;
@@ -632,13 +633,19 @@ Node<Key, Value>* BinarySearchTree<Key, Value>::internalFind(const Key& key) con
 template<typename Key, typename Value>
 bool BinarySearchTree<Key, Value>::isBalanced() const
 {
-    if (root_ == nullptr) {
+    return isBalancedHelper(root_);
+}
+
+template<typename Key, typename Value>
+bool BinarySearchTree<Key, Value>::isBalancedHelper(Node<Key, Value>* node) const
+{
+    if (node == nullptr) {
 		return true;
 	}
 
 	// get the heights of the left and right subtrees
-	int leftHeight = height(root_->getLeft());
-	int rightHeight = height(root_->getRight());
+	int leftHeight = height(node->getLeft());
+	int rightHeight = height(node->getRight());
 
 	// determine if this node is balanced
 	if (abs(leftHeight - rightHeight) > 1) {
@@ -646,10 +653,10 @@ bool BinarySearchTree<Key, Value>::isBalanced() const
 	}
 
 	// check if the subtrees are balances
-	if (!isBalanced(root_->getLeft())) {
+	if (!isBalanced(node->getLeft())) {
 		return false;
 	}
-	if (!isBalanced(root_->getRight())) {
+	if (!isBalanced(node->getRight())) {
 		return false;
 	}
 
@@ -658,11 +665,23 @@ bool BinarySearchTree<Key, Value>::isBalanced() const
 }
 
 template<typename Key, typename Value>
-int BinarySearchTree<Key, Value>::height(Node<Key, Value>* node) {
+int BinarySearchTree<Key, Value>::height(Node<Key, Value>* node) const
+{
 	if (node == nullptr) {
 		return 0;
 	}
-	return 1 + max(height(node->getLeft()), height(node->getRight()));
+
+    int leftHeight = height(node->getLeft());
+    int rightHeight = height(node->getRight());
+    int maxHeight;
+
+    if (leftHeight > rightHeight) {
+        maxHeight = leftHeight;
+    } else {
+        maxHeight = rightHeight;
+    }
+
+	return 1 + maxHeight;
 }
 
 
