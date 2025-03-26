@@ -653,15 +653,7 @@ bool BinarySearchTree<Key, Value>::isBalancedHelper(Node<Key, Value>* node) cons
 	}
 
 	// check if the subtrees are balances
-	if (!isBalanced(node->getLeft())) {
-		return false;
-	}
-	if (!isBalanced(node->getRight())) {
-		return false;
-	}
-
-	// if all nodes are balanced, return true
-	return true;
+	return isBalancedHelper(node->getLeft()) && isBalancedHelper(node->getRight());
 }
 
 template<typename Key, typename Value>
